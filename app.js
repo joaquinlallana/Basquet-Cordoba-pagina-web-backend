@@ -10,7 +10,7 @@ var session = require("express-session");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var loginRouter = require("./routes/admin/login");
-var adminNovedadesRouter = require("./routes/admin/novedades");
+var adminNoticiasRouter = require("./routes/admin/noticias");
 var app = express();
 
 // view engine setup
@@ -30,7 +30,7 @@ app.use(
     saveUninitialized: true,
   })
 );
-
+//Middleware que revisa que este logueado para ingresar a /admin/novedades
 const secured = async (req, res, next) => {
   try {
     console.log(req.session.id_usuario);
@@ -47,7 +47,7 @@ const secured = async (req, res, next) => {
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/admin/login", loginRouter);
-app.use("/admin/novedades",secured , adminNovedadesRouter);
+app.use("/admin/noticias",secured , adminNoticiasRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
