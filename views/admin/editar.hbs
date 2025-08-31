@@ -1,0 +1,72 @@
+<div class="container" style="margin:100px auto">
+  <div class="row">
+    <div class="col-6 offset-3">
+      <h1 class="display-6"> Edita la noticia </h1>
+      <br />
+      <form action="/admin/noticias/editar" method="POST">
+      
+        <input type="hidden" name="id_noticia" value="{{noticia.id_noticia}}" />
+
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Titulo</span>
+          <input
+            type="text"
+            value="{{noticia.titulo}}"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            id="titulo"
+            name="titulo"
+            placeholder="Ingresa el título de la noticia"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-text">Subtítlo</span>
+          <textarea
+            class="form-control"
+            aria-label="With textarea"
+            name="subtitulo"
+            placeholder="Ingresa una breve descripción de la noticia"
+            required
+          >{{noticia.subtitulo}}</textarea>
+        </div>
+        <br />
+        <div class="input-group">
+          <span class="input-group-text">Contenido</span>
+          <textarea
+            class="form-control"
+            aria-label="With textarea"
+            name="contenido"
+            placeholder="Ingresa el contenido de la noticia"
+            required
+          >{{noticia.contenido}}</textarea>
+        </div>
+        <br />
+        <div class="input-group mb-3">
+          <label
+            class="input-group-text"
+            for="inputGroupSelect01"
+          >Categoria</label>
+          <select
+            class="form-select"
+            id="categoria"
+            name="id_categoria"
+            required
+          >
+            {{#each categorias}}
+              <option value="{{this.id_categoria}}">{{this.nombre}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Editar noticia</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{{#if error}}
+  <h5>{{message}}</h5>
+{{/if}}

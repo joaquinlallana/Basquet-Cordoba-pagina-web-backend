@@ -1,20 +1,19 @@
-<div class="'container" style="margin: 50px auto">
+<div class="container" style="margin: 50px auto">
   <div class="row">
-    <div class="col">
-      <p class=" text-end">
-        Hola
-        {{usuario}}
-        !<a class="btn btn-danger" href="/admin/login/logout">Cerrar sesión</a><i
-          class="bi bi-x-square"
-        ></i></p>
+    <div class="col d-flex justify-content-between align-items-center">
+      <h5 class="mb-0" style="margin-left: 20px">
+        Hola {{usuario}} !
+      </h5>
+      <a class="btn btn-danger d-flex align-items-center" href="/admin/login/logout">
+        Cerrar sesión <i class="bi bi-x-square ms-2"></i>
+      </a>
     </div>
   </div>
   <div class="row">
     <div class="col-7">
         <h3>Listado de noticias</h3>
+        <a href="/admin/noticias/agregar" class="btn btn-success"><i class="fa fa-plus"></i>Nuevo</a>
     </div>
-    <div class="col-2 text-end">
-        <a href="#" class="btn btn-success"><i class="fa fa-plus"></i>Nuevo</a>
   </div>
   <div class="row">
     <div class="col">
@@ -27,16 +26,18 @@
                 </tr>
             </thead>
             <tbody>
+              {{#each noticias}}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Noticia 1 Titulo</td>
+                    <th scope="row">{{id_noticia}}</th>
+                    <td>{{titulo}}</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-secondary">
+                        <a href="/admin/noticias/editar/{{id_noticia}}" class="btn btn-sm btn-secondary">
                             <i class="fa fa-pencil"></i></a>
-                        <a href="#" class="btn btn-sm btn-secondary">
+                        <a href="/admin/noticias/eliminar/{{id_noticia}}" class="btn btn-sm btn-secondary">
                             <i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
+              {{/each}}
             </tbody>
         </table>
     </div>
