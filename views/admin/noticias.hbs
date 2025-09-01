@@ -33,7 +33,7 @@
                     <td class="text-center">
                         <a href="/admin/noticias/editar/{{id_noticia}}" class="btn btn-sm btn-secondary">
                             <i class="fa fa-pencil"></i></a>
-                        <a href="/admin/noticias/eliminar/{{id_noticia}}" class="btn btn-sm btn-secondary">
+                        <a href="/admin/noticias/eliminar/{{id_noticia}}" class="btn btn-sm btn-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar esta noticia?');">
                             <i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
