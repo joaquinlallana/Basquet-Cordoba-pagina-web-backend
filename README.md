@@ -1,12 +1,12 @@
 # Córdoba Básquet - Backend
 
-Backend de la aplicación **Córdoba Básquet**, desarrollado en Node.js, Express, Handlebars y MySQL.
+Backend de la aplicación **Córdoba Básquet**, desarrollado con Node.js, Express, Handlebars y MySQL.
 
 ---
 
 ## 🚀 Tecnologías utilizadas
 
-- **Node.js** (>= 14)
+- **Node.js** (v14 o superior)
 - **Express** (framework web)
 - **Handlebars** (motor de vistas)
 - **MySQL** (base de datos relacional)
@@ -39,13 +39,17 @@ Backend de la aplicación **Córdoba Básquet**, desarrollado en Node.js, Expres
    MYSQL_DB_NAME=cordoba-basquet
    MYSQL_USER=root
    MYSQL_PASSWORD=
+   PORT=3000
+   SESSION_SECRET=tu_clave_secreta
    ```
+
+   > Cambia los valores según tu entorno y agrega una clave secreta segura para las sesiones.
 
 4. **Prepara la base de datos:**
 
    - Crea la base de datos `cordoba-basquet` en MySQL.
-   - Crea las tablas necesarias, por ejemplo: `usuarios`, `noticias`, `categorias`, etc.
-   - Asegúrate de que el usuario y contraseña de MySQL coincidan con los del `.env`.
+   - Crea las tablas necesarias: `usuarios`, `noticias`, `categorias`, etc.
+   - Asegúrate de que el usuario y contraseña de MySQL coincidan con los del archivo `.env`.
 
 ---
 
@@ -76,9 +80,9 @@ El servidor estará disponible en [http://localhost:3000](http://localhost:3000)
 
 - Login de administrador.
 - Panel de gestión de noticias protegido por sesión.
-- ABM de noticias (Agregar, Editar, Eliminar).
+- ABM de noticias (Alta, Baja, Modificación).
 - Gestión de sesiones con `express-session`.
-- Listado y filtrado por categorías.
+- Listado y filtrado de noticias por categorías.
 
 ---
 
@@ -87,15 +91,16 @@ El servidor estará disponible en [http://localhost:3000](http://localhost:3000)
 - El acceso a `/admin/noticias` está protegido y requiere autenticación.
 - Personaliza las vistas en la carpeta `views/` según tus necesidades.
 - Puedes agregar más modelos y rutas para ampliar la funcionalidad.
+- El proyecto está pensado para fines académicos y puede ser extendido según los requerimientos.
 
 ---
 
 ## 👨‍💻 Créditos
 
-Desarrollado por Córdoba Básquet.
+Desarrollado por el equipo de Córdoba Básquet.
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto es de uso académico y sin fines comerciales.
+Proyecto de uso académico y sin fines comerciales.
