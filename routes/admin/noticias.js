@@ -107,7 +107,7 @@ router.get("/eliminar/:id", async (req, res, next) => {
   let noticia = await noticiasModel.getNoticiaById(id);
   
   if (noticia.img_id) {
-    await (destroy(noticia.img_id));
+    await (cloudinary.uploader.destroy(noticia.img_id));
   }
   await noticiasModel.deleteNoticiaById(id);
   res.redirect("/admin/noticias");
@@ -140,9 +140,9 @@ router.post("/editar", async (req, res, next) => {
         img_id = (await uploader(imagen.tempFilePath)).public_id;
         borrar_img_vieja = true;
       }
-    }
+    } /*ARREGLAR */
     if (borrar_img_vieja && req.body.img_original) {
-      await destroy(req.body.img_original);
+      await cloudinary.uploader.destroy(req.body.img_original);
     }
 
     let noticia = {
