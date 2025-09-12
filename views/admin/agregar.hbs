@@ -6,6 +6,7 @@
       <form
         action="/admin/noticias/agregar"
         method="POST"
+        enctype="multipart/form-data"
       >
         <div class="input-group input-group-sm mb-3">
           <span class="input-group-text" id="inputGroup-sizing-sm">Titulo</span>
@@ -59,13 +60,27 @@
             {{/each}}
           </select>
         </div>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="inputGroupFile01">Imagen</label>
+          <input
+            type="file"
+            class="form-control"
+            id="imagen"
+            name="imagen"
+            accept="image/*"
+          />
+        </div>
         <br />
-        <button type="submit" class="btn btn-primary" onclick="return confirm('¿Estás seguro de que deseas agregar esta noticia?');">Agregar noticia</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          onclick="return confirm('¿Estás seguro de que deseas agregar esta noticia?');"
+        >Agregar noticia</button>
       </form>
     </div>
   </div>
 </div>
 
 {{#if error}}
-    <h5>{{message}}</h5>
+  <h5>{{message}}</h5>
 {{/if}}

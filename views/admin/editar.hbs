@@ -3,8 +3,12 @@
     <div class="col-6 offset-3">
       <h1 class="display-6"> Edita la noticia </h1>
       <br />
-      <form action="/admin/noticias/editar" method="POST">
-      
+      <form
+        action="/admin/noticias/editar"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+
         <input type="hidden" name="id_noticia" value="{{noticia.id_noticia}}" />
 
         <div class="input-group input-group-sm mb-3">
@@ -32,7 +36,9 @@
             required
           >{{noticia.subtitulo}}</textarea>
         </div>
+
         <br />
+
         <div class="input-group">
           <span class="input-group-text">Contenido</span>
           <textarea
@@ -43,7 +49,9 @@
             required
           >{{noticia.contenido}}</textarea>
         </div>
+
         <br />
+
         <div class="input-group mb-3">
           <label
             class="input-group-text"
@@ -60,8 +68,41 @@
             {{/each}}
           </select>
         </div>
+
         <br />
-        <button type="submit" class="btn btn-primary" onclick="return confirm('¿Estás seguro de que deseas editar esta noticia?');">Editar noticia</button>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="inputGroupFile01">Imagen</label>
+          <input
+            type="file"
+            class="form-control"
+            id="imagen"
+            name="imagen"
+            accept="image/*"
+          />
+        </div>
+
+        <br />
+
+        <div class="input-group mb-3">
+          <label>
+            <input
+              type="checkbox"
+              name="img_delete"
+              id="img_delete"
+              value="1"
+            />
+            Desea eliminar la imagen actual?</label>
+          <input type="hidden" name="img_original" value="{{noticia.imagen}}" />
+        </div>
+
+        <br />
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          onclick="return confirm('¿Estás seguro de que deseas editar esta noticia?');"
+        >Editar noticia</button>
       </form>
     </div>
   </div>

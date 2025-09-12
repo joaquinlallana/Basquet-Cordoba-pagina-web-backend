@@ -1,9 +1,31 @@
 var express = require("express");
 var router = express.Router();
 var noticiasModel = require("../../models/noticiasModel");
+var util = require("util");
+var cloudinary = require("cloudinary").v2;
+var uploader = util.promisify(cloudinary.uploader.upload);
 
 router.get("/", async function (req, res, next) {
   var noticias = await noticiasModel.getNoticias();
+
+  noticias = noticias.map((noticia) => {
+    if (noticia.img_id) {
+      const imagen = cloudinary.image(noticia.img_id, {
+        width: 50,
+        height: 50,
+        crop: "fill",
+      });
+      return {
+        ...noticia,
+        imagen,
+      };
+    } else {
+      return {
+        ...noticia,
+        imagen: "",
+      };
+    }
+  });
   res.render("admin/noticias", {
     layout: "admin/layout",
     usuario: req.session.nombre,
@@ -30,6 +52,13 @@ router.get("/agregar", async (req, res, next) => {
 
 router.post("/agregar", async (req, res, next) => {
   try {
+    var img_id = "";
+
+    if (req.files && Object.keys(req.files).length > 0) {
+      var imagen = req.files.imagen;
+      img_id = (await uploader(imagen.tempFilePath)).public_id;
+    }
+
     if (
       req.body.titulo != "" &&
       req.body.subtitulo != "" &&
@@ -47,7 +76,10 @@ router.post("/agregar", async (req, res, next) => {
 
       console.log("Noticia a insertar", noticia);
 
-      await noticiasModel.insertNoticia(noticia);
+      await noticiasModel.insertNoticia({
+        ...noticia,
+        img_id,
+      });
       res.redirect("/admin/noticias");
     } else {
       const categorias = await noticiasModel.getCategorias();
@@ -72,6 +104,11 @@ router.post("/agregar", async (req, res, next) => {
 
 router.get("/eliminar/:id", async (req, res, next) => {
   var id = req.params.id;
+  let noticia = await noticiasModel.getNoticiaById(id);
+  
+  if (noticia.img_id) {
+    await (destroy(noticia.img_id));
+  }
   await noticiasModel.deleteNoticiaById(id);
   res.redirect("/admin/noticias");
 });
@@ -83,19 +120,37 @@ router.get("/editar/:id", async (req, res, next) => {
   res.render("admin/editar", {
     layout: "admin/layout",
     noticia,
-    categorias
+    categorias,
   });
 });
 
 router.post("/editar", async (req, res, next) => {
   try {
     const categorias = await noticiasModel.getCategorias();
+    /* Agregar cuando se edita la noticia si se sube o no una imagen, o si continua con la misma imiagen original de la noticia*/
+    let img_id = req.body.img_original;
+    let borrar_img_vieja = false;
+
+    if (req.body.img_delete === "1") {
+      img_id = null;
+      borrar_img_vieja = true;
+    } else {
+      if (req.files && Object.keys(req.files).length > 0) {
+        imagen = req.files.imagen;
+        img_id = (await uploader(imagen.tempFilePath)).public_id;
+        borrar_img_vieja = true;
+      }
+    }
+    if (borrar_img_vieja && req.body.img_original) {
+      await destroy(req.body.img_original);
+    }
 
     let noticia = {
       titulo: req.body.titulo,
       subtitulo: req.body.subtitulo,
       contenido: req.body.contenido,
       id_categoria: req.body.id_categoria,
+      img_id,
     };
 
     let id = req.body.id_noticia;
