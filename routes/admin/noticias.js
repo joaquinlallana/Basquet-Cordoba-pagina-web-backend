@@ -127,22 +127,31 @@ router.get("/editar/:id", async (req, res, next) => {
 router.post("/editar", async (req, res, next) => {
   try {
     const categorias = await noticiasModel.getCategorias();
-    /* Agregar cuando se edita la noticia si se sube o no una imagen, o si continua con la misma imiagen original de la noticia*/
-    let img_id = req.body.img_original;
+    let img_id = req.body.img_original || null;
     let borrar_img_vieja = false;
 
+    // Si el usuario marca eliminar la imagen sin subir otra
     if (req.body.img_delete === "1") {
-      img_id = null;
-      borrar_img_vieja = true;
+      img_id = null; // se eliminará la referencia en la DB
+      borrar_img_vieja = !!req.body.img_original; // borrar en cloudinary si existe img_original
     } else {
-      if (req.files && Object.keys(req.files).length > 0) {
-        imagen = req.files.imagen;
-        img_id = (await uploader(imagen.tempFilePath)).public_id;
-        borrar_img_vieja = true;
+      // Si viene un archivo nuevo, subirlo y borrar la vieja
+      if (req.files && req.files.imagen) {
+        const archivo = req.files.imagen;
+        const uploadResult = await uploader(archivo.tempFilePath);
+        img_id = uploadResult.public_id;
+        borrar_img_vieja = !!req.body.img_original;
       }
-    } /*ARREGLAR */
+    }
+
+    // Eliminar la imagen vieja en Cloudinary si procede
     if (borrar_img_vieja && req.body.img_original) {
-      await cloudinary.uploader.destroy(req.body.img_original);
+      try {
+        await cloudinary.uploader.destroy(req.body.img_original);
+      } catch (err) {
+        console.error('Error eliminando imagen en Cloudinary:', err);
+        // no detener el flujo por un fallo en la eliminación remota
+      }
     }
 
     let noticia = {

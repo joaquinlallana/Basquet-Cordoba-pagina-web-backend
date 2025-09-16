@@ -3,12 +3,21 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var os = require('os');
 
 require('dotenv').config();
 var session = require("express-session");
 var fileUpload = require("express-fileupload");
 var cloudinary = require("cloudinary").v2;
-cloudinary.config(process.env.CLOUDINARY_URL);
+try {
+  if (process.env.CLOUDINARY_URL) {
+    cloudinary.config(process.env.CLOUDINARY_URL);
+  } else {
+    console.warn('CLOUDINARY_URL no está definida. Saltando configuración de Cloudinary.');
+  }
+} catch (err) {
+  console.error('Error configurando Cloudinary:', err);
+}
 var cors = require("cors");
 
 var indexRouter = require("./routes/index");
@@ -53,7 +62,8 @@ const secured = async (req, res, next) => {
 
 app.use(fileUpload({
   useTempFiles: true,
-  tempFileDir: '/tmp/'
+  // usar el tmp del sistema para compatibilidad con Windows
+  tempFileDir: os.tmpdir()
 }));
 
 app.use("/", indexRouter);
